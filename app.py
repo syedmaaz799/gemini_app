@@ -17,7 +17,7 @@ if not api_key:
     st.stop()
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel("models/gemini-1.5-flash")
+model = genai.GenerativeModel("models/gemini-2.5-pro")
 
 # Load saved chats on session start
 if "all_chats" not in st.session_state:

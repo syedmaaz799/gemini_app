@@ -492,6 +492,7 @@ def get_profile():
         'created_at': user.created_at.isoformat() if user.created_at else ''
     })
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    init_db()  # Keep your database initialization
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)

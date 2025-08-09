@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Login - Robotic Gemini AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ff41;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff41;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 30px rgba(0, 255, 65, 0.3); }
+            to { box-shadow: 0 0 50px rgba(0, 255, 65, 0.6); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-size: 2em;
+            text-shadow: 0 0 15px #00ff41;
+            animation: glitch 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-2px); }
+            20% { transform: translateX(2px); }
+            30% { transform: translateX(-1px); }
+            40% { transform: translateX(1px); }
+        }
+
+        .login-header p {
+            color: #ffffff;
+            opacity: 0.8;
+        }
+
+        /* Enhanced Robot Icon Styles */
+        .robot-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .robot-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .robot-face {
+            width: 100%;
+            height: 100%;
+            background: #00ff41;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            overflow: hidden;
+        }
+
+        .robot-eyes {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .eye {
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+            position: relative;
+            animation: blink 4s infinite;
+            transition: all 0.3s ease;
+        }
+
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 4px;
+            height: 4px;
+            background: #00ff41;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        /* Realistic Goggles */
+        .goggles {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 66px;  /* balanced width inside 100px face */
+            height: 30px; /* comfortable vertical size */
+            z-index: 10;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .goggle-lens {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 4px solid #333;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.9));
+            box-shadow: 
+                inset 0 0 8px rgba(0, 255, 65, 0.2),
+                0 0 12px rgba(0, 255, 65, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .goggle-lens.left {
+            left: 0;
+        }
+
+        .goggle-lens.right {
+            right: 0;
+        }
+
+        .goggle-bridge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+            z-index: 3;
+        }
+
+        /* Goggle straps for realism */
+        .goggle-strap {
+            position: absolute;
+            width: 4px;    /* temple thickness */
+            height: 20px;  /* +25% length */
+            background: #333;
+            border-radius: 2px;
+            box-shadow: 0 0 4px rgba(0, 255, 65, 0.3);
+            z-index: 1;
+        }
+
+        .goggle-strap.left {
+            left: 6px;
+            top: -16px;   /* keep base near rim while lengthening */
+            transform: rotate(-15deg);
+        }
+
+        .goggle-strap.right {
+            right: 6px;
+            top: -16px;   /* keep base near rim while lengthening */
+            transform: rotate(15deg);
+        }
+
+        /* Enhanced Robot states */
+        .robot-icon.goggles-off .goggles {
+            transform: translate(-50%, -50%) translateY(-80px) scale(0.7);
+            opacity: 0;
+        }
+
+        .robot-icon.goggles-off .robot-eyes {
+            transform: translateY(12px) rotateX(15deg);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .robot-icon.goggles-off .eye {
+            animation: blink 2s infinite, gazeDown 3s ease-in-out infinite;
+        }
+
+        @keyframes gazeDown {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(4px) rotateX(10deg); }
+        }
+
+        /* Enhanced Whistling animation */
+        .robot-icon.whistling .robot-face {
+            animation: whistle 0.8s ease-out;
+        }
+
+        @keyframes whistle {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-3deg) scale(1.02); }
+            75% { transform: rotate(3deg) scale(1.02); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        /* Enhanced Music note animation */
+        .music-note {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 35px;
+            color: #00ff41;
+            opacity: 0;
+            z-index: 10;
+            text-shadow: 0 0 15px rgba(0, 255, 65, 0.8);
+        }
+
+        @keyframes whistleNote {
+            0% { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(0) scale(0.5); 
+            }
+            20% { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(-10px) scale(1.2); 
+            }
+            80% { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(-40px) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(-60px) scale(0.8); 
+            }
+        }
+
+        .robot-icon.whistling .music-note {
+            animation: whistleNote 0.8s ease-out;
+        }
+
+        /* Cheek animation for whistling */
+        .cheek {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            top: 60%;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .cheek.left {
+            left: 20%;
+        }
+
+        .cheek.right {
+            right: 20%;
+        }
+
+        .robot-icon.whistling .cheek {
+            opacity: 1;
+            animation: puff 2s ease-in-out;
+        }
+
+        @keyframes puff {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Enhanced Downward gaze animation */
+        .robot-icon.watching .robot-eyes {
+            transform: translateY(12px) rotateX(15deg);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .robot-icon.watching .eye {
+            animation: gazeDown 3s ease-in-out infinite;
+        }
+
+        @keyframes gazeDown {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(4px) rotateX(10deg); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff41;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        /* Password field specific styles */
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #00ff41;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            background: rgba(0, 255, 65, 0.1);
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .password-field input {
+            padding-right: 100px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .flash-message.error {
+            background: rgba(255, 0, 64, 0.2);
+            border: 1px solid #ff0040;
+            color: #ff0040;
+        }
+
+        .flash-message.success {
+            background: rgba(0, 255, 65, 0.2);
+            border: 1px solid #00ff41;
+            color: #00ff41;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 255, 65, 0.3);
+            border-radius: 50%;
+            border-top-color: #00ff41;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Robot reaction animations */
+        @keyframes robotReaction {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .robot-icon.reacting {
+            animation: robotReaction 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <!-- Enhanced Animated Robot Icon -->
+            <div class="robot-icon" id="robotIcon">
+                <div class="robot-face">
+                                         <!-- Realistic Goggles -->
+                     <div class="goggles">
+                         <div class="goggle-lens left"></div>
+                         <div class="goggle-lens right"></div>
+                         <div class="goggle-bridge"></div>
+                         <div class="goggle-strap left"></div>
+                         <div class="goggle-strap right"></div>
+                     </div>
+                    
+                    <!-- Cheeks for whistling animation -->
+                    <div class="cheek left"></div>
+                    <div class="cheek right"></div>
+                    
+                    <!-- Eyes -->
+                    <div class="robot-eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                </div>
+                
+                                 <!-- Enhanced Music note for whistling -->
+                 <div class="music-note" id="musicNote">🎵</div>
+            </div>
+            <h1>🤖 AI Login</h1>
+            <p>Access your robotic AI assistant</p>
+        </div>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group password-field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <button type="button" class="password-toggle" id="passwordToggle">
+                    👁️ Show
+                </button>
+            </div>
+            
+            <button type="submit" class="login-btn">🔐 Login</button>
+        </form>
+
+        <div class="signup-link">
+            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize particles
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Enhanced password visibility toggle functionality
+        function initPasswordToggle() {
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('passwordToggle');
+            const robotIcon = document.getElementById('robotIcon');
+            const musicNote = document.getElementById('musicNote');
+            let isPasswordVisible = false;
+
+            passwordToggle.addEventListener('click', function() {
+                // Toggle password visibility
+                if (isPasswordVisible) {
+                    passwordInput.type = 'password';
+                    passwordToggle.textContent = '👁️ Show';
+                    isPasswordVisible = false;
+                    
+                    // Robot puts goggles back on and whistles
+                    robotIcon.classList.remove('goggles-off', 'watching');
+                    robotIcon.classList.add('whistling');
+                    
+                                         // Trigger enhanced music note animation
+                     musicNote.style.animation = 'none';
+                     setTimeout(() => {
+                         musicNote.style.animation = 'whistleNote 0.8s ease-out';
+                     }, 10);
+                    
+                    // Add reaction animation
+                    robotIcon.classList.add('reacting');
+                    setTimeout(() => {
+                        robotIcon.classList.remove('reacting', 'whistling');
+                    }, 2000);
+                    
+                } else {
+                    passwordInput.type = 'text';
+                    passwordToggle.textContent = '🙈 Hide';
+                    isPasswordVisible = true;
+                    
+                    // Robot removes goggles and looks down
+                    robotIcon.classList.add('goggles-off', 'watching');
+                    
+                    // Add reaction animation
+                    robotIcon.classList.add('reacting');
+                    setTimeout(() => {
+                        robotIcon.classList.remove('reacting');
+                    }, 600);
+                }
+            });
+
+            // Robot should only look down when goggles are off (i.e., when showing password)
+            passwordInput.addEventListener('focus', function() {
+                if (isPasswordVisible) {
+                    robotIcon.classList.add('watching');
+                }
+            });
+
+            passwordInput.addEventListener('blur', function() {
+                if (isPasswordVisible) {
+                    robotIcon.classList.remove('watching');
+                }
+            });
+
+            // Robot reacts to typing only when password is visible
+            passwordInput.addEventListener('input', function() {
+                if (isPasswordVisible) {
+                    robotIcon.classList.add('watching');
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initParticles();
+            initPasswordToggle();
+        });
+    </script>
+</body>
+</html>

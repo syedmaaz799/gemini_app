@@ -1,189 +1,280 @@
-# 🤖 Robotic Gemini AI Chat
+# 🤖 Enhanced Robotic Gemini AI Chatbot
 
-A modern, animated Flask-based web interface for Google's Gemini AI chatbot with a futuristic robotic theme.
+A sophisticated Flask and Streamlit-based web interface for Google's Gemini AI chatbot with enhanced accuracy, conversational memory, and authentication system.
 
-## ✨ Features
+## 🚀 Key Features
 
-- 🤖 **Robotic Theme**: Futuristic design with animated particles and glowing effects
-- 💬 **Chat Management**: Create, delete, and manage multiple chat sessions
-- 🎨 **Animated Interface**: Smooth animations and visual effects
-- 📱 **Responsive Design**: Works on desktop and mobile devices
-- 💾 **Persistent Storage**: Chat history is saved locally
-- ⚡ **Real-time Chat**: Instant responses from Gemini AI
-- 🎯 **Modern UI**: Clean, intuitive interface with robotic aesthetics
+### 🔐 Authentication System
+- **Secure Login/Signup**: Complete user authentication with password hashing
+- **User Profiles**: Personalized experience with user-specific chat history
+- **Session Management**: Secure session handling with Flask sessions
+- **Password Security**: Salted SHA-256 password hashing
 
-## 🚀 Quick Start
+### 🧠 Enhanced AI Accuracy
+- **System Prompts**: Sophisticated system prompts for better response quality
+- **Response Validation**: Automatic validation of AI responses
+- **Retry Logic**: Intelligent retry mechanism for failed requests
+- **Error Pattern Detection**: Identifies and handles common AI error patterns
 
-### Prerequisites
+### 💬 Conversational Memory
+- **Context Management**: Maintains conversation history across sessions
+- **Smart Context Building**: Intelligent context assembly for better responses
+- **Memory Optimization**: Efficient memory usage with context limits
+- **Persistent Storage**: Local JSON storage for chat history
 
-- Python 3.7 or higher
-- Google Gemini API key
-
-### Installation
-
-1. **Clone or download the project files**
-
-2. **Create a virtual environment:**
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Activate the virtual environment:**
-   
-   **Windows:**
-   ```bash
-   venv\Scripts\activate
-   ```
-   
-   **macOS/Linux:**
-   ```bash
-   source venv/bin/activate
-   ```
-
-4. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Set up your Gemini API key:**
-   
-   **Option 1: Using Environment Variables (Recommended)**
-   
-   Run the setup script:
-   ```bash
-   python setup_env.py
-   ```
-   
-   Or manually create a `.env` file in the project root:
-   ```
-   GEMINI_API_KEY=your_gemini_api_key_here
-   FLASK_SECRET_KEY=your_secret_key_here
-   ```
-   
-   **Option 2: Direct Configuration**
-   
-   Edit `app_flask.py` and replace the API key:
-   ```python
-   genai.configure(api_key="YOUR_GEMINI_API_KEY_HERE")
-   ```
-
-6. **Run the application:**
-   ```bash
-   python app_flask.py
-   ```
-
-7. **Open your browser and go to:**
-   ```
-   http://localhost:5000
-   ```
-
-## 🎨 Features Overview
-
-### Visual Design
-- **Matrix-style color scheme**: Green text on dark background
-- **Animated particles**: Floating background elements
-- **Glowing effects**: Pulsing borders and shadows
-- **Smooth transitions**: Hover effects and animations
-- **Typing indicators**: Visual feedback during AI responses
-
-### Functionality
-- **Multiple chats**: Create and manage separate conversation threads
-- **Chat history**: All conversations are automatically saved
-- **Delete chats**: Remove unwanted conversations
-- **Real-time responses**: Instant AI responses with typing indicators
-- **Responsive layout**: Adapts to different screen sizes
+### 🎨 Futuristic UI/UX
+- **Robotic Theme**: Cyberpunk-inspired design with animated particles
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Real-time Feedback**: Live typing indicators and context information
+- **Markdown Support**: Rich text formatting for AI responses
 
 ## 📁 Project Structure
 
 ```
 Simple_Gemini - Copy/
-├── app_flask.py          # Main Flask application
-├── requirements.txt      # Python dependencies
-├── saved_chats.json     # Chat history storage
+├── app_flask.py          # Enhanced Flask application with authentication
+├── app.py               # Enhanced Streamlit application
 ├── templates/
-│   └── index.html       # Main HTML template
+│   ├── login.html       # Login page with robotic theme
+│   ├── signup.html      # Signup page with validation
+│   ├── chat.html        # Enhanced chat interface
+│   └── index.html       # Original chat interface
+├── requirements.txt      # Python dependencies
+├── env_template.txt     # Environment variables template
+├── setup_env.py         # Environment setup script
+├── start_app.bat        # Windows startup script
 └── README.md           # This file
 ```
 
+## 🛠️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd Simple_Gemini-Copy
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Environment Setup
+Create a `.env` file based on `env_template.txt`:
+```bash
+# Copy the template
+cp env_template.txt .env
+
+# Edit the .env file with your API keys
+GEMINI_API_KEY=your_gemini_api_key_here
+FLASK_SECRET_KEY=your-secret-key-here
+```
+
+### 4. Get Gemini API Key
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
+3. Add it to your `.env` file
+
+## 🚀 Running the Application
+
+### Option 1: Flask Application (Recommended)
+```bash
+python app_flask.py
+```
+- **URL**: http://localhost:5000
+- **Features**: Full authentication, user management, enhanced UI
+
+### Option 2: Streamlit Application
+```bash
+streamlit run app.py
+```
+- **URL**: http://localhost:8501
+- **Features**: Enhanced AI accuracy, conversational memory
+
+## 🔧 Technical Improvements
+
+### 1. Model Output Accuracy
+
+**Problem**: Gemini AI occasionally delivers incorrect or irrelevant responses.
+
+**Solution**: 
+- **Enhanced System Prompts**: Comprehensive system prompts that guide the AI's behavior
+- **Response Validation**: Automatic validation of AI responses to detect errors
+- **Retry Logic**: Intelligent retry mechanism with fallback prompts
+- **Error Pattern Detection**: Identifies common AI error patterns and handles them
+
+```python
+# Enhanced system prompt
+SYSTEM_PROMPT = """You are a helpful, accurate, and intelligent AI assistant. Your responses should be:
+
+1. **Accurate and Relevant**: Always provide correct, up-to-date information
+2. **Contextual**: Maintain awareness of the conversation history
+3. **Helpful**: Offer practical, actionable advice
+4. **Clear**: Use simple, understandable language
+5. **Professional**: Maintain a professional yet friendly tone
+6. **Safe**: Avoid harmful, unethical, or dangerous content
+
+When responding:
+- If you're unsure about something, say so rather than guessing
+- Provide sources when possible for factual information
+- Ask clarifying questions when needed
+- Be concise but thorough
+- Use markdown formatting for better readability
+
+Remember: Your goal is to be genuinely helpful while maintaining high accuracy standards."""
+```
+
+### 2. Conversational Memory
+
+**Problem**: The model doesn't retain information from earlier conversation turns.
+
+**Solution**:
+- **Context Building**: Intelligent assembly of conversation history
+- **Memory Management**: Efficient handling of conversation context
+- **Smart Truncation**: Keeps recent messages while avoiding token limits
+- **Persistent Storage**: Local JSON storage for chat history
+
+```python
+def build_conversation_context(messages, system_prompt):
+    """Build conversation context for better memory"""
+    context = f"{system_prompt}\n\n"
+    
+    # Add recent conversation history (last 10 messages to avoid token limits)
+    recent_messages = messages[-10:] if len(messages) > 10 else messages
+    
+    for msg in recent_messages:
+        role = "User" if msg["role"] == "user" else "Assistant"
+        context += f"{role}: {msg['content']}\n"
+    
+    return context
+```
+
+### 3. Authentication System
+
+**Problem**: No user management or security features.
+
+**Solution**:
+- **User Registration**: Secure signup with email validation
+- **Password Security**: Salted SHA-256 hashing
+- **Session Management**: Flask sessions for user state
+- **User Isolation**: Each user has their own chat history
+
+```python
+def hash_password(password):
+    """Hash password with salt"""
+    salt = secrets.token_hex(16)
+    hash_obj = hashlib.sha256()
+    hash_obj.update((password + salt).encode())
+    return salt + hash_obj.hexdigest()
+
+def verify_password(password, hashed_password):
+    """Verify password against hash"""
+    salt = hashed_password[:32]
+    hash_obj = hashlib.sha256()
+    hash_obj.update((password + salt).encode())
+    return hashed_password[32:] == hash_obj.hexdigest()
+```
+
+### 4. Enhanced User Experience
+
+**Features Added**:
+- **Real-time Context Info**: Shows context length and message count
+- **Typing Indicators**: Visual feedback during AI processing
+- **Error Handling**: Graceful error handling with user-friendly messages
+- **Responsive Design**: Works on all device sizes
+- **Markdown Support**: Rich text formatting for AI responses
+
+## 🔒 Security Features
+
+- **Password Hashing**: Salted SHA-256 for secure password storage
+- **Session Security**: Secure session management with Flask
+- **Input Validation**: Server-side validation of all user inputs
+- **CSRF Protection**: Built-in Flask CSRF protection
+- **Secure Headers**: Proper security headers implementation
+
+## 📊 Performance Optimizations
+
+- **Context Optimization**: Smart truncation to avoid token limits
+- **Caching**: Efficient chat history caching
+- **Error Recovery**: Intelligent retry mechanisms
+- **Memory Management**: Optimized context building
+
+## 🎯 Usage Examples
+
+### 1. Creating a New Account
+1. Visit the application
+2. Click "Sign up here"
+3. Enter username, email, and password
+4. Confirm password
+5. Click "Create Account"
+
+### 2. Starting a Conversation
+1. Login to your account
+2. Click "New Chat" or start typing
+3. Type your message
+4. The AI will respond with context-aware answers
+
+### 3. Managing Chats
+- **Rename**: Click the rename button in the sidebar
+- **Delete**: Click the ❌ button next to any chat
+- **Switch**: Click on any chat in the sidebar to switch
+
 ## 🔧 Configuration
 
-### Environment Variables (Recommended)
+### Environment Variables
+```bash
+# Required
+GEMINI_API_KEY=your_gemini_api_key_here
 
-The application now uses environment variables for better security by default:
-
-1. Create a `.env` file in the project root:
-   ```
-   GEMINI_API_KEY=your_api_key_here
-   FLASK_SECRET_KEY=your_secret_key_here
-   ```
-
-2. The application automatically loads these variables. If you prefer to hardcode the API key, you can modify the code directly in the application files.
+# Optional (for Flask app)
+FLASK_SECRET_KEY=your-secret-key-here
+```
 
 ### Customization
-
-You can customize the appearance by modifying the CSS in `templates/index.html`:
-
-- **Colors**: Change the `#00ff41` green color to any other color
-- **Animations**: Modify the CSS animations for different effects
-- **Layout**: Adjust the grid layout and spacing
-- **Fonts**: Change the font family from 'Courier New' to other monospace fonts
-
-## 🛠️ API Endpoints
-
-The Flask app provides the following REST API endpoints:
-
-- `GET /api/chats` - Get all chats
-- `POST /api/chats` - Create a new chat
-- `GET /api/chats/<chat_id>` - Get specific chat
-- `POST /api/chats/<chat_id>/messages` - Add message to chat
-- `PUT /api/chats/<chat_id>/title` - Update chat title
-- `DELETE /api/chats/<chat_id>` - Delete chat
-- `DELETE /api/chats/<chat_id>/messages/<index>` - Delete specific message
-
-## 🔒 Security Notes
-
-- Change the default secret key in production
-- Use environment variables for API keys
-- Consider adding rate limiting for production use
-- Implement proper session management for multi-user environments
+- **System Prompt**: Modify `SYSTEM_PROMPT` in the code
+- **Context Length**: Adjust the message limit in `build_conversation_context()`
+- **UI Theme**: Modify CSS in the HTML templates
+- **Retry Logic**: Adjust `max_retries` in the response handling
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **API Key Error**: Make sure your Gemini API key is valid and has proper permissions
-2. **Port Already in Use**: Change the port in `app_flask.py` or kill the process using port 5000
-3. **Import Errors**: Make sure all dependencies are installed in your virtual environment
-4. **Chat History Not Loading**: Check if `saved_chats.json` has proper read/write permissions
+1. **API Key Error**
+   - Ensure your `.env` file contains the correct API key
+   - Verify the API key is valid at Google AI Studio
 
-### Debug Mode
+2. **Import Errors**
+   - Run `pip install -r requirements.txt`
+   - Ensure Python 3.7+ is installed
 
-For development, the app runs in debug mode by default. For production, set:
-```python
-app.run(debug=False, host='0.0.0.0', port=5000)
-```
+3. **Port Already in Use**
+   - Change the port in the app configuration
+   - Kill existing processes on the port
 
-## 📱 Browser Compatibility
-
-- Chrome/Chromium (recommended)
-- Firefox
-- Safari
-- Edge
+4. **Authentication Issues**
+   - Clear browser cookies
+   - Restart the application
+   - Check the `users.json` file for corruption
 
 ## 🤝 Contributing
 
-Feel free to submit issues and enhancement requests!
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-## 📄 License
+## 📝 License
 
-This project is open source and available under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- Google Gemini AI for the powerful language model
-- Flask framework for the web framework
+- Google Gemini AI for the underlying AI model
+- Flask and Streamlit communities for the web frameworks
 - The open-source community for inspiration and tools
 
 ---
 
-**Enjoy chatting with your robotic AI assistant! 🤖✨** 
+**🎉 Enjoy your enhanced robotic AI assistant! 🤖** 

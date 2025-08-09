@@ -27,24 +27,40 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "your-secret-key-here")
 
 # ===============================
-# Database (MySQL via SQLAlchemy)
+# Database (SQLAlchemy configurable)
 # ===============================
 
-# You can override these in Render/Env vars. Defaults match your screenshot.
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "mymaazsql")
-DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
-DB_PORT = os.getenv("DB_PORT", "3306")
-DB_NAME = os.getenv("DB_NAME", "gemini_app")
+# Prefer a full DATABASE_URL if provided (e.g., from Render dashboard)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = (
-    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
-)
+# Backwards compatibility: if legacy MySQL env vars are provided, construct URL
+if not DATABASE_URL:
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    db_host = os.getenv("DB_HOST")
+    db_port = os.getenv("DB_PORT", "3306")
+    db_name = os.getenv("DB_NAME")
+    if db_user and db_password and db_host and db_name:
+        DATABASE_URL = (
+            f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}?charset=utf8mb4"
+        )
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,
-)
+# Safe default for platforms without a DB (e.g., Render free web service): SQLite in /tmp
+if not DATABASE_URL:
+    DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "sqlite:////tmp/gemini_app.db")
+
+# Create engine with appropriate options
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False},
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+    )
+
 SessionLocal = scoped_session(sessionmaker(bind=engine, autoflush=False, autocommit=False))
 Base = declarative_base()
 
@@ -92,6 +108,21 @@ def init_db() -> None:
 
 def get_db_session():
     return SessionLocal()
+
+# Ensure tables exist when running under a WSGI server like Gunicorn (Render)
+@app.before_request
+def _ensure_db_initialized():
+    if not getattr(app, "_db_initialized", False):
+        init_db()
+        app._db_initialized = True
+
+@app.teardown_appcontext
+def _remove_db_session(exception=None):
+    # Ensure scoped_session is removed per request/app context
+    try:
+        SessionLocal.remove()
+    except Exception:
+        pass
 
 
 def generate_chat_title(from_text: str) -> str:
@@ -492,7 +523,6 @@ def get_profile():
         'created_at': user.created_at.isoformat() if user.created_at else ''
     })
 
-if __name__ == "__main__":
-    init_db()  # Keep your database initialization
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True, host='0.0.0.0', port=5000)

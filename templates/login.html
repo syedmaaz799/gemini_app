@@ -118,21 +118,26 @@
             overflow: hidden;
         }
 
+        /* Robot Eyes */
         .robot-eyes {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 20px;
+            z-index: 5;
             display: flex;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-            transition: all 0.4s ease;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .eye {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             background: #000;
             border-radius: 50%;
             position: relative;
-            animation: blink 4s infinite;
             transition: all 0.3s ease;
         }
 
@@ -141,40 +146,33 @@
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 4px;
-            height: 4px;
-            background: #00ff41;
+            width: 6px;
+            height: 6px;
+            background: #fff;
             border-radius: 50%;
-            opacity: 0.8;
         }
 
-        @keyframes blink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-
-        /* Realistic Goggles */
+        /* Goggles */
         .goggles {
             position: absolute;
-            top: 52%;
+            top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 66px;  /* balanced width inside 100px face */
-            height: 30px; /* comfortable vertical size */
+            width: 70px;
+            height: 30px;
             z-index: 10;
             transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .goggle-lens {
             position: absolute;
-            width: 24px;
-            height: 24px;
-            border: 4px solid #333;
+            width: 28px;
+            height: 28px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #000;
             border-radius: 50%;
-            background: linear-gradient(145deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.9));
             box-shadow: 
-                inset 0 0 8px rgba(0, 255, 65, 0.2),
-                0 0 12px rgba(0, 255, 65, 0.4),
+                0 0 8px rgba(0, 0, 0, 0.8),
                 0 2px 4px rgba(0, 0, 0, 0.5);
             z-index: 2;
         }
@@ -190,37 +188,35 @@
         .goggle-bridge {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
+            left: 28px;
+            transform: translateY(-50%);
+            width: 14px;
             height: 4px;
-            background: #333;
+            background: #000;
             border-radius: 2px;
-            box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
             z-index: 3;
         }
 
-        /* Goggle straps for realism */
         .goggle-strap {
             position: absolute;
-            width: 4px;    /* temple thickness */
-            height: 20px;  /* +25% length */
-            background: #333;
+            width: 4px;
+            height: 25px;
+            background: #000;
             border-radius: 2px;
-            box-shadow: 0 0 4px rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
             z-index: 1;
         }
 
         .goggle-strap.left {
-            left: 6px;
-            top: -16px;   /* keep base near rim while lengthening */
-            transform: rotate(-15deg);
+            left: 4px;
+            top: -20px;
+            transform: rotate(0deg);
         }
 
         .goggle-strap.right {
-            right: 6px;
-            top: -16px;   /* keep base near rim while lengthening */
-            transform: rotate(15deg);
+            right: 4px;
+            top: -20px;
+            transform: rotate(0deg);
         }
 
         /* Enhanced Robot states */
@@ -230,18 +226,46 @@
         }
 
         .robot-icon.goggles-off .robot-eyes {
-            transform: translateY(12px) rotateX(15deg);
+            transform: translate(-50%, -50%) translateY(8px);
             transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 15;
         }
 
+        .robot-icon.watching .robot-eyes {
+            transform: translate(-50%, -50%) translateY(8px);
+        }
+
+        /* Ensure eyes are visible when goggles are off */
         .robot-icon.goggles-off .eye {
-            animation: blink 2s infinite, gazeDown 3s ease-in-out infinite;
+            background: #000;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .robot-icon.goggles-off .eye::after {
+            background: #fff;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Eye animations */
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
         }
 
         @keyframes gazeDown {
-            0%, 100% { transform: translateY(0) rotateX(0deg); }
-            50% { transform: translateY(4px) rotateX(10deg); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
         }
+
+        .robot-icon.watching .eye {
+            animation: gazeDown 2s ease-in-out infinite;
+        }
+
+        .eye.blinking {
+            animation: blink 0.3s ease-in-out;
+        }
+
+
 
         /* Enhanced Whistling animation */
         .robot-icon.whistling .robot-face {
@@ -323,18 +347,9 @@
         }
 
         /* Enhanced Downward gaze animation */
-        .robot-icon.watching .robot-eyes {
-            transform: translateY(12px) rotateX(15deg);
+        .robot-icon.watching .robot-mouth {
+            transform: translateX(-50%) translateY(8px);
             transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .robot-icon.watching .eye {
-            animation: gazeDown 3s ease-in-out infinite;
-        }
-
-        @keyframes gazeDown {
-            0%, 100% { transform: translateY(0) rotateX(0deg); }
-            50% { transform: translateY(4px) rotateX(10deg); }
         }
 
         .form-group {
@@ -492,24 +507,24 @@
             <!-- Enhanced Animated Robot Icon -->
             <div class="robot-icon" id="robotIcon">
                 <div class="robot-face">
-                                         <!-- Realistic Goggles -->
-                     <div class="goggles">
-                         <div class="goggle-lens left"></div>
-                         <div class="goggle-lens right"></div>
-                         <div class="goggle-bridge"></div>
-                         <div class="goggle-strap left"></div>
-                         <div class="goggle-strap right"></div>
-                     </div>
+                    <!-- Robot Eyes -->
+                    <div class="robot-eyes">
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                    </div>
+                    
+                    <!-- Realistic Goggles -->
+                    <div class="goggles">
+                        <div class="goggle-lens left"></div>
+                        <div class="goggle-lens right"></div>
+                        <div class="goggle-bridge"></div>
+                        <div class="goggle-strap left"></div>
+                        <div class="goggle-strap right"></div>
+                    </div>
                     
                     <!-- Cheeks for whistling animation -->
                     <div class="cheek left"></div>
                     <div class="cheek right"></div>
-                    
-                    <!-- Eyes -->
-                    <div class="robot-eyes">
-                        <div class="eye"></div>
-                        <div class="eye"></div>
-                    </div>
                 </div>
                 
                                  <!-- Enhanced Music note for whistling -->
@@ -586,11 +601,11 @@
                     robotIcon.classList.remove('goggles-off', 'watching');
                     robotIcon.classList.add('whistling');
                     
-                                         // Trigger enhanced music note animation
-                     musicNote.style.animation = 'none';
-                     setTimeout(() => {
-                         musicNote.style.animation = 'whistleNote 0.8s ease-out';
-                     }, 10);
+                    // Trigger enhanced music note animation
+                    musicNote.style.animation = 'none';
+                    setTimeout(() => {
+                        musicNote.style.animation = 'whistleNote 0.8s ease-out';
+                    }, 10);
                     
                     // Add reaction animation
                     robotIcon.classList.add('reacting');
@@ -603,7 +618,7 @@
                     passwordToggle.textContent = '🙈 Hide';
                     isPasswordVisible = true;
                     
-                    // Robot removes goggles and looks down
+                    // Robot removes goggles and looks down with eyes visible
                     robotIcon.classList.add('goggles-off', 'watching');
                     
                     // Add reaction animation
